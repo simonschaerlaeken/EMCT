@@ -1,0 +1,300 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>(1) Importing Graphs from Files</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-23"><meta name="DC.source" content="example1.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>(1) Importing Graphs from Files</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Intro</a></li><li><a href="#2">Simple Edge Files</a></li><li><a href="#3">More Complicated Edge Files</a></li><li><a href="#4">Duplicate Edge Handling</a></li><li><a href="#5">Preprocessing a Matrix for use with importNet</a></li><li><a href="#6">Importing a Graph as Frames</a></li></ul></div><h2 id="1">Intro</h2><p><i>Created by Brighton Ancelin</i></p><p>This toolbox has four main objectives:</p><div><ol><li><b>Help the user import a graph from a file or matrix into MATLAB as a graph object</b></li><li>Help the user perform common operations and alterations on graph objects</li><li>Provide tools for basic analysis of graph objects and calculation of key metrics</li><li>Provide a variety of different visualization means for graph objects, both time-varying and time-invariant</li></ol></div><p>To get started with this toolbox, we will first focus on importing graphs from files and matrices.</p><p><i>Note: A filename ending in .net is assumed to be a Pajek file. Please be careful to change extensions if needed. More info on the Pajek format here:</i> <a href="http://vlado.fmf.uni-lj.si/pub/networks/pajek/">http://vlado.fmf.uni-lj.si/pub/networks/pajek/</a></p><h2 id="2">Simple Edge Files</h2><p>Graph data comes in all kinds of formats, but most commonly is the edge-by-row format. In this format, every line of the file contains two positive integers. Each line in the file represents an edge in the graph, and the two integers on said line are the nodes which that edge connects. The first integer is the "from node" and the second integer is the "to node." In undirected graphs, the order of these nodes does not matter, as edges do not have direction. In directed graphs, however, the order does matter, and the edge points from the "from node" to the "to node." An example of one such file might be the following 'ex_edges-by-rows.txt':</p><p>
+1 5<br>
+2 3<br>
+4 6<br>
+12 8<br>
+9 12<br>
+</p><p>Such files can easily be imported as graph objects using the <b>importNet</b> function. For more information on how this function works, use the MATLAB command: help importNet</p><pre class="codeinput">graphObj = importNet(<span class="string">'ex_edges-by-rows.txt'</span>,false);
+graphObj.Edges
+</pre><pre class="codeoutput">ans = 
+    EndNodes
+    ________
+    1     5 
+    2     3 
+    4     6 
+    8    12 
+    9    12 
+</pre><h2 id="3">More Complicated Edge Files</h2><p>While many edge files have each row representing a single edge, some files will have more than two columns. Two of the columns will contain node IDs, but other data will be written as well. Some of these columns may be useful to import into our graph objects, such as edge weights for weighted graphs. For example, let's look at 'ex_complicatedEdgeFile.txt', whose first column contains edge weights and whose second and third columns contain node IDs:</p><p>
+4 1 4<br>
+2 2 3<br>
+4 3 1<br>
+7 5 8<br>
+3 1 5<br>
+</p><pre class="codeinput">graphObj = importNet(<span class="string">'ex_complicatedEdgeFile.txt'</span>,false,<span class="string">'nodeCols'</span>,[2,3],<span class="string">'weightCol'</span>,1);
+graphObj.Edges
+</pre><pre class="codeoutput">ans = 
+    EndNodes    Weight
+    ________    ______
+    1    3      4     
+    1    4      4     
+    1    5      3     
+    2    3      2     
+    5    8      7     
+</pre><h2 id="4">Duplicate Edge Handling</h2><p>Graph objects in MATLAB can't hold multiple identical edges, so <b>importNet</b> has four predefined methods for dealing with duplicate edges: 'first', 'ignore', 'sum', and 'average'. For more information on what each does, use the MATLAB command: help importNet</p><p>For directed graphs, the order of nodes matters, but for undirected graphs it does not. Let's observe how we can import the following graph using averaged weights from the file 'ex_duplicateEdges.txt':</p><p>
+1 2 500<br>
+3 4 400<br>
+2 4 600<br>
+2 1 200<br>
+3 4 700<br>
+</p><pre class="codeinput">graphObj = importNet(<span class="string">'ex_duplicateEdges.txt'</span>,false,<span class="string">'nodeCols'</span>,[1,2],<span class="keyword">...</span>
+		<span class="string">'weightCol'</span>,3,<span class="string">'dupMode'</span>,<span class="string">'average'</span>);
+graphObj.Edges
+</pre><pre class="codeoutput">ans = 
+    EndNodes    Weight
+    ________    ______
+    1    2      350   
+    2    4      600   
+    3    4      550   
+</pre><h2 id="5">Preprocessing a Matrix for use with importNet</h2><p>If the capabilities of <b>importNet</b> just aren't cutting it, you can always do some preprocessing and pass <b>importNet</b> the edge matrix. For example, let's say you have a file with 3 columns: the first two are node IDs, and the third represents the classification of the edge. We want to create a graph with only classification 7 edges. Here's the file 'ex_edgesClassified.txt':</p><p>
+1 2 7<br>
+3 2 3<br>
+3 2 7<br>
+5 7 4<br>
+4 2 7<br>
+2 5 7<br>
+2 2 2<br>
+</p><p>Here's the code:</p><pre class="codeinput">fileMatrix = str2num(fileread(<span class="string">'ex_edgesClassified.txt'</span>));
+class7mask = 7 == fileMatrix(:,3);
+graphObj = importNet(fileMatrix(class7mask,1:2),false);
+graphObj.Edges
+</pre><pre class="codeoutput">ans = 
+    EndNodes
+    ________
+    1    2  
+    2    3  
+    2    4  
+    2    5  
+</pre><h2 id="6">Importing a Graph as Frames</h2><p>Graphs that change over time, or temporal graphs, can be imported as a cell vector of graph objects. However, this is not accomplished with the <b>importNet</b> function, rather it is accomplished with the <b>getGraphFrames</b> function. This function will create graph frames from a matrix of edges and a column vector of timestamps corresponding to the entries in the edge matrix. For more information on how to use this function, use the MATLAB command: help getGraphFrames</p><pre class="codeinput">data = [1,2,  0;<span class="keyword">...</span>
+	    1,2,  1;<span class="keyword">...</span>
+	    2,3,  1;<span class="keyword">...</span>
+	    4,2,  2;<span class="keyword">...</span>
+	    4,2,  3;<span class="keyword">...</span>
+	    3,2,  0;<span class="keyword">...</span>
+	    1,4,  5];
+edgeMat = data(:,1:2);
+timestampVec = data(:,3);
+graphFrames = getGraphFrames(edgeMat,timestampVec,true,1,99);
+fprintf(<span class="string">'Frame Count: %d\n'</span>,length(graphFrames));
+fprintf(<span class="string">'Frame 1:\n'</span>); disp(graphFrames{1}.Edges.EndNodes);
+fprintf(<span class="string">'Frame 2:\n'</span>); disp(graphFrames{2}.Edges.EndNodes);
+fprintf(<span class="string">'Frame 3:\n'</span>); disp(graphFrames{3}.Edges.EndNodes);
+fprintf(<span class="string">'Frame 4:\n'</span>); disp(graphFrames{4}.Edges.EndNodes);
+fprintf(<span class="string">'Frame 5:\n'</span>); disp(graphFrames{5}.Edges.EndNodes);
+fprintf(<span class="string">'Frame 6:\n'</span>); disp(graphFrames{6}.Edges.EndNodes);
+</pre><pre class="codeoutput">Frame Count: 6
+Frame 1:
+     1     2
+     3     2
+Frame 2:
+     1     2
+     2     3
+Frame 3:
+     4     2
+Frame 4:
+     4     2
+Frame 5:
+Frame 6:
+     1     4
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% (1) Importing Graphs from Files
+%% Intro
+% _Created by Brighton Ancelin_
+% 
+% This toolbox has four main objectives:
+% 
+% # *Help the user import a graph from a file or matrix into MATLAB as a graph object*
+% # Help the user perform common operations and alterations on graph objects
+% # Provide tools for basic analysis of graph objects and calculation of key metrics
+% # Provide a variety of different visualization means for graph objects, both time-varying and time-invariant
+%
+% To get started with this toolbox, we will first focus on importing graphs 
+% from files and matrices. 
+%
+% _Note: A filename ending in .net is assumed to be a Pajek file. Please be
+% careful to change extensions if needed. More info on the Pajek format
+% here:_
+% <http://vlado.fmf.uni-lj.si/pub/networks/pajek/>
+%% Simple Edge Files
+% Graph data comes in all kinds of formats, but most commonly is the
+% edge-by-row format. In this format, every line of the file contains two
+% positive integers. Each line in the file represents an edge in the graph,
+% and the two integers on said line are the nodes which that edge connects.
+% The first integer is the "from node" and the second integer is the "to
+% node." In undirected graphs, the order of these nodes does not matter, as
+% edges do not have direction. In directed graphs, however, the order does
+% matter, and the edge points from the "from node" to the "to node." An
+% example of one such file might be the following 'ex_edges-by-rows.txt':
+%
+% <html>
+% 1 5<br>
+% 2 3<br>
+% 4 6<br>
+% 12 8<br>
+% 9 12<br>
+% </html>
+% 
+% Such files can easily be imported as graph objects using the *importNet*
+% function. For more information on how this function works, use the MATLAB
+% command: help importNet
+
+graphObj = importNet('ex_edges-by-rows.txt',false);
+graphObj.Edges
+%% More Complicated Edge Files
+% While many edge files have each row representing a single edge, some
+% files will have more than two columns. Two of the columns will contain
+% node IDs, but other data will be written as well. Some of these columns
+% may be useful to import into our graph objects, such as edge weights for
+% weighted graphs. For example, let's look at 'ex_complicatedEdgeFile.txt',
+% whose first column contains edge weights and whose second and third
+% columns contain node IDs:
+%
+% <html>
+% 4 1 4<br>
+% 2 2 3<br>
+% 4 3 1<br>
+% 7 5 8<br>
+% 3 1 5<br>
+% </html>
+
+graphObj = importNet('ex_complicatedEdgeFile.txt',false,'nodeCols',[2,3],'weightCol',1);
+graphObj.Edges
+%% Duplicate Edge Handling
+% Graph objects in MATLAB can't hold multiple identical edges, so
+% *importNet* has four predefined methods for dealing with duplicate edges:
+% 'first', 'ignore', 'sum', and 'average'. For more information on what 
+% each does, use the MATLAB command: help importNet
+%
+% For directed graphs, the order of nodes matters, but for undirected 
+% graphs it does not. Let's observe how we can import the following graph 
+% using averaged weights from the file 'ex_duplicateEdges.txt':
+%
+% <html>
+% 1 2 500<br>
+% 3 4 400<br>
+% 2 4 600<br>
+% 2 1 200<br>
+% 3 4 700<br>
+% </html>
+
+graphObj = importNet('ex_duplicateEdges.txt',false,'nodeCols',[1,2],...
+		'weightCol',3,'dupMode','average');
+graphObj.Edges
+%% Preprocessing a Matrix for use with importNet
+% If the capabilities of *importNet* just aren't cutting it, you can always
+% do some preprocessing and pass *importNet* the edge matrix. For example, 
+% let's say you have a file with 3 columns: the first two are node IDs, and
+% the third represents the classification of the edge. We want to create a 
+% graph with only classification 7 edges. Here's the file 
+% 'ex_edgesClassified.txt':
+%
+% <html>
+% 1 2 7<br>
+% 3 2 3<br>
+% 3 2 7<br>
+% 5 7 4<br>
+% 4 2 7<br>
+% 2 5 7<br>
+% 2 2 2<br>
+% </html>
+%
+% Here's the code:
+fileMatrix = str2num(fileread('ex_edgesClassified.txt'));
+class7mask = 7 == fileMatrix(:,3);
+graphObj = importNet(fileMatrix(class7mask,1:2),false);
+graphObj.Edges
+%% Importing a Graph as Frames
+% Graphs that change over time, or temporal graphs, can be imported as a
+% cell vector of graph objects. However, this is not accomplished with the
+% *importNet* function, rather it is accomplished with the *getGraphFrames*
+% function. This function will create graph frames from a matrix of edges
+% and a column vector of timestamps corresponding to the entries in the
+% edge matrix. For more information on how to use this function, use the
+% MATLAB command: help getGraphFrames
+data = [1,2,  0;...
+	    1,2,  1;...
+	    2,3,  1;...
+	    4,2,  2;...
+	    4,2,  3;...
+	    3,2,  0;...
+	    1,4,  5];
+edgeMat = data(:,1:2);
+timestampVec = data(:,3);
+graphFrames = getGraphFrames(edgeMat,timestampVec,true,1,99);
+fprintf('Frame Count: %d\n',length(graphFrames));
+fprintf('Frame 1:\n'); disp(graphFrames{1}.Edges.EndNodes);
+fprintf('Frame 2:\n'); disp(graphFrames{2}.Edges.EndNodes);
+fprintf('Frame 3:\n'); disp(graphFrames{3}.Edges.EndNodes);
+fprintf('Frame 4:\n'); disp(graphFrames{4}.Edges.EndNodes);
+fprintf('Frame 5:\n'); disp(graphFrames{5}.Edges.EndNodes);
+fprintf('Frame 6:\n'); disp(graphFrames{6}.Edges.EndNodes);
+##### SOURCE END #####
+--></body></html>

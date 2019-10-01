@@ -1,0 +1,184 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>(3) Graph Analysis and Metrics</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-23"><meta name="DC.source" content="example3.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>(3) Graph Analysis and Metrics</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Intro</a></li><li><a href="#2">All-in-One Metrics Struct</a></li></ul></div><h2 id="1">Intro</h2><p><i>Created by Brighton Ancelin</i></p><p>This toolbox has four main objectives:</p><div><ol><li>Help the user import a graph from a file or matrix into MATLAB as a graph object</li><li>Help the user perform common operations and alterations on graph objects</li><li><b>Provide tools for basic analysis of graph objects and calculation of key metrics</b></li><li>Provide a variety of different visualization means for graph objects, both time-varying and time-invariant</li></ol></div><p>In this page, we will discuss how to generate a graph metrics struct.</p><h2 id="2">All-in-One Metrics Struct</h2><p>A metrics struct contains many different fields of data about a graph. A brief overview of each field can be seen by using the MATLAB command: help getGraphMetrics</p><p>There are two main functions associated with graph metrics fields: <b>getGraphMetrics</b> and <b>exportMetricsFile</b>. The prior can be used to obtain a metrics struct, and the latter can be used to export said metric data into a text file. The latter function will call the prior internally and return the struct, so there's seldom a reason to call the two in succession. An example of proper usage is as follows:</p><pre class="codeinput">metrics = exportMetricsFile(graph([1,2,3],[2,3,1]),<span class="string">'Title of Graph'</span>,<span class="string">'filename'</span>);
+help <span class="string">getGraphMetrics</span>;
+</pre><pre class="codeoutput">  $Author Brighton Ancelin
+  Returns a structure of various graph metrics.
+ 
+  INPUT:
+ 	graphObj: Graph object to be analyzed
+ 
+  OUTPUT:
+    metrics: Structure with metrics data. Fields:
+ 		isDirected: true if graph is directed, false if graph is undirected
+ 		isFullyConn: true if graph is fully, strongly connected.
+ 			See also:
+ 				https://en.wikipedia.org/wiki/Connectivity_(graph_theory)#Connected_graph
+ 				https://en.wikipedia.org/wiki/Strongly_connected_component
+ 		distances: NxN (N is the number of nodes) matrix where
+ 			distances(i,j) represents the shortest path distance between 
+ 			node i and node j. distances(i,i) will always equal 0,
+ 			regardless of self-edges.
+ 			See also:
+ 				https://en.wikipedia.org/wiki/Shortest_path_problem
+ 		nodeCt: Integer number of nodes in the graph.
+ 		edgeCt: Integer number of edges in the graph.
+ 		avgPathLength: Average of all shortest paths between distinct nodes
+ 			in the graph.
+ 		diameter: Maximum shortest path length in the graph, i.e. maximum 
+ 			value of the aforesaid 'distances' field after matrix 
+ 			linearization.
+ 		clusterings: Column vector of local clustering coefficients.
+ 			clusterings(n) will return the local clustering coefficient of
+ 			the nth node. Nodes with degree 1 or less (i.e. 1 or fewer 
+ 			neighbors) are incapable of forming triangles and are given a
+ 			default clustering coefficient of 0.
+ 			See also:
+ 				https://en.wikipedia.org/wiki/Clustering_coefficient#Local_clustering_coefficient
+ 				http://www.stevenstrogatz.com/articles/collective-dynamics-of-small-world-networks-pdf
+ 		avgClustering: Average of all local clustering coefficients as
+ 			defined above.
+ 		maxEigenvalue: Maximum eigenvalue of the adjacency matrix. By the
+ 			Perron-Frobenius Theorem, this eigenvalue has an associated
+ 			eigenvector whose entries are all nonnegative (for undirected 
+ 			graphs). This is useful for centrality measurements.
+ 			See also:
+ 				https://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem
+ 		eigenCentralities: Eigenvector associated with the maxEigenvalue
+ 			referenced above. eigenCentralities(n) will return the 
+ 			eigencentrality of the nth node.
+ 			See also:
+ 				https://en.wikipedia.org/wiki/Eigenvector_centrality
+ 		degrees: Column vector of degree values. degrees(n) will return the
+ 			degree of the nth node.
+ 			See also:
+ 				https://en.wikipedia.org/wiki/Degree_(graph_theory)
+ 		degreeCentralities: Column vector of degree centralities, defined
+ 			as the degree of each node divided by the maximum degree that
+ 			node could have. degreeCentralities(n) will return the degree 
+ 			centrality of the nth node.
+ 			See also:
+ 				https://en.wikipedia.org/wiki/Centrality#Degree_centrality
+ 		closenessCentralities: Column vector of closeness centralities,
+ 			defined as the reciprocal of the average of all shortest paths 
+ 			originating from a given node. closenessCentralities(n) will 
+ 			return the closeness centrality of the nth node.
+ 			See also:
+ 				https://en.wikipedia.org/wiki/Centrality#Closeness_centrality
+ 		distanceDistribution: A table of distance distribution data.
+ 			The 'Distance' vector contains integer values that represent
+ 			the shortest path lengths. The 'QuantityOfNodePairs' vector
+ 			contains corresponding quantities of node pairs that have the
+ 			associated shortest path between them.
+ 			See also:
+ 				http://konect.uni-koblenz.de/plots/distance_distribution_plot
+ 		assortativityByNode: Column vector of assortativity data.
+ 			assortativityByNode(n) will return the average degree of all
+ 			neighbors of the nth node.
+ 			See also:
+ 				https://en.wikipedia.org/wiki/Assortativity#Neighbor_connectivity
+ 		assortativityByDegree: Column vector of assortativity data.
+ 			assortativityByDegree(n) will return the average of the vector
+ 			assortativityByNode(arr) where arr contains the node indices of
+ 			all nodes in the graph of degree n.
+ 			See also:
+ 				https://en.wikipedia.org/wiki/Assortativity#Neighbor_connectivity
+ 
+  GRAPH REQUIREMENTS:
+ 	- Unweighted
+
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% (3) Graph Analysis and Metrics
+%% Intro
+% _Created by Brighton Ancelin_
+%
+% This toolbox has four main objectives:
+% 
+% # Help the user import a graph from a file or matrix into MATLAB as a graph object
+% # Help the user perform common operations and alterations on graph objects
+% # *Provide tools for basic analysis of graph objects and calculation of key metrics*
+% # Provide a variety of different visualization means for graph objects, both time-varying and time-invariant
+%
+% In this page, we will discuss how to generate a graph metrics struct.
+%% All-in-One Metrics Struct
+% A metrics struct contains many different fields of data about a graph. A
+% brief overview of each field can be seen by using the MATLAB command: 
+% help getGraphMetrics
+% 
+% There are two main functions associated with graph metrics fields:
+% *getGraphMetrics* and *exportMetricsFile*. The prior can be used to
+% obtain a metrics struct, and the latter can be used to export said
+% metric data into a text file. The latter function will call the prior
+% internally and return the struct, so there's seldom a reason to call the
+% two in succession. An example of proper usage is as follows:
+metrics = exportMetricsFile(graph([1,2,3],[2,3,1]),'Title of Graph','filename');
+help getGraphMetrics;
+##### SOURCE END #####
+--></body></html>

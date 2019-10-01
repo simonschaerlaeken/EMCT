@@ -1,0 +1,195 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>(4) Data Visualization and Animations</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-23"><meta name="DC.source" content="example4.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>(4) Data Visualization and Animations</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Intro</a></li><li><a href="#2">Basic Graph Plot</a></li><li><a href="#3">Graph Metrics Visualizations</a></li><li><a href="#4">Convention-Style Visualizations</a></li><li><a href="#5">Edge-Updating Visualizations</a></li><li><a href="#6">Infection Spreading Visualizations</a></li></ul></div><h2 id="1">Intro</h2><p><i>Created by Brighton Ancelin</i></p><p>This toolbox has four main objectives:</p><div><ol><li>Help the user import a graph from a file or matrix into MATLAB as a graph object</li><li>Help the user perform common operations and alterations on graph objects</li><li>Provide tools for basic analysis of graph objects and calculation of key metrics</li><li><b>Provide a variety of different visualization means for graph objects, both time-varying and time-invariant</b></li></ol></div><p>This page discusses the final point in our list, how to visualize graph data.</p><h2 id="2">Basic Graph Plot</h2><p>While many larger graphs look like rats' nests when plotted, such plots can still convey meaningful information. For smaller graphs, such plots are understandably more interpretable. The default MATLAB <b>plot</b> function renders graph plots, and more documentation on that can be found in the MATLAB documentation. However, the function <b>plotAndOverlayGraphMetrics</b> both plots the graph object and adds a legend containing several metrics values. In some instances, such a function can be desirable.</p><pre class="codeinput">graphObj = graph([1,2,3,4,1,5,],[5,3,4,1,2,2,]);
+plot(graphObj); title(<span class="string">'Default Plot'</span>);
+plotAndOverlayGraphMetrics(graphObj); title(<span class="string">'Plot with Metrics Legend'</span>);
+</pre><img vspace="5" hspace="5" src="example4_01.png" alt=""> <img vspace="5" hspace="5" src="example4_02.png" alt=""> <h2 id="3">Graph Metrics Visualizations</h2><p>Many researchers want to have graphs and plots of metrics data to interpret and/or showcase. There are currently four metrics visualization functions: <b>exportAssortativityVis</b>, <b>exportClustDistribVis</b>, <b>exportDistDistribVis</b>, and <b>exportMetricsVisualizations</b>. More information on each function can be obtained through the MATLAB help command, but in short these functions do the following:</p><div><ul><li><b>exportAssortativityVis</b>: Plots neighbors' degrees against nodes' degrees</li><li><b>exportClustDistribVis</b>: Plots the distribution of local clustering coefficients across the population of all nodes</li><li><b>exportDistDistribVis</b>: Plots the distribution of shortest path distances across the population of all nodes</li><li><b>exportMetricsVisualizations</b>: Calls the above three functions</li></ul></div><p>All of these functions require two parameters: a metrics struct and a netname to be used in the filename of the exported image. There is also an optional output of the first three functions: the figure object of the visualization. If the output argument is not used, the figure will close automatically.</p><p><i>Note: These functions all require user approval of the visualization prior to exporting.</i></p><p>
+<img src="example_assortativityPlot.png">
+<img src="example_clusteringDistribution.png">
+<img src="example_distanceDistribution.png">
+</p><h2 id="4">Convention-Style Visualizations</h2><p>Convention-style visuals, in short, are those where lone nodes are pushed to an outer ring, and connected components are displayed in the center of this outer ring. Nodes move around over time as they form and break edges, much like people at a convention would do. More details can be found with the MATLAB command: help getConventionStyleVisualData</p><p>Three basic commands are associated with the convention-style visuals:</p><div><ul><li><b>plotConventionStyleVisual</b>: plots a single frame of a graph in the convention-style format.</li><li><b>plotConventionStyleVisualAnimated</b>: plots an animation of convention-style visuals, with nodes moving over time</li><li><b>exportConventionStyleVisualAnimated</b>: exports a GIF file of an animation of convention-style visuals, with nodes moving over time</li></ul></div><p>More information on each of these functions can be found using the MATLAB help command, and an example script using animations can be found in 'example_animationScript.m'</p><p>
+<img src="example_conventionAnimation.gif">
+</p><pre class="codeinput">graphObj = graph([1,1,2,3,4],[2,3,5,5,9]);
+plotConventionStyleVisual(graphObj);
+</pre><img vspace="5" hspace="5" src="example4_03.png" alt=""> <h2 id="5">Edge-Updating Visualizations</h2><p>Edge-updating visuals, in short, are those where the overall graph (the amalgam of all edges over all time series data) is used to position all nodes, and then edges are drawn and erased as they are formed and destroyed. More details can be found with the MATLAB command: help exportEdgeUpdatingVisualAnimated</p><p>GIF files of such animations can be generated with the <b>exportEdgeUpdatingVisualAnimated</b> function. An example script using this function can be found in 'example_animationScript.m'</p><p>
+<img src="example_edgeUpdatingAnimation.gif">
+</p><h2 id="6">Infection Spreading Visualizations</h2><p>Both convention-style and edge-updating animations can be used to show how an infection spreads across a population. Infection data can be encoded as a matrix of 0s and 1s, where each row represents a node, each column represents a time step, and a 0 signifies healthy while a 1 signifies infected (e.g. if matrix(i,j) = 1, then the ith node is infected at time step j). Using the <b>exportConventionStyleInfectionVisualAnimated</b> and <b>exportEdgeUpdatingInfectionVisualAnimated</b> functions, one can create export these animations as GIFs. These functions' animations vary from their infection-blind counterparts in that infected nodes are colored red whereas healthy nodes are colored blue, and active edges are colored green to avoid visual confusion with node colors.</p><p>While the intention of these animations was infection spread, they can be used to signify any boolean state spreading across a population.</p><p>
+<img src="">
+</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% (4) Data Visualization and Animations
+%% Intro
+% _Created by Brighton Ancelin_
+%
+% This toolbox has four main objectives:
+% 
+% # Help the user import a graph from a file or matrix into MATLAB as a graph object
+% # Help the user perform common operations and alterations on graph objects
+% # Provide tools for basic analysis of graph objects and calculation of key metrics
+% # *Provide a variety of different visualization means for graph objects, both time-varying and time-invariant*
+%
+% This page discusses the final point in our list, how to visualize graph
+% data.
+%% Basic Graph Plot
+% While many larger graphs look like rats' nests when plotted, such plots
+% can still convey meaningful information. For smaller graphs, such plots
+% are understandably more interpretable. The default MATLAB *plot* function
+% renders graph plots, and more documentation on that can be found in the
+% MATLAB documentation. However, the function *plotAndOverlayGraphMetrics*
+% both plots the graph object and adds a legend containing several metrics
+% values. In some instances, such a function can be desirable.
+graphObj = graph([1,2,3,4,1,5,],[5,3,4,1,2,2,]);
+plot(graphObj); title('Default Plot');
+plotAndOverlayGraphMetrics(graphObj); title('Plot with Metrics Legend');
+%% Graph Metrics Visualizations
+% Many researchers want to have graphs and plots of metrics data to
+% interpret and/or showcase. There are currently four metrics
+% visualization functions: *exportAssortativityVis*,
+% *exportClustDistribVis*, *exportDistDistribVis*, and
+% *exportMetricsVisualizations*. More information on each function can be
+% obtained through the MATLAB help command, but in short these functions do
+% the following:
+% 
+% * *exportAssortativityVis*: Plots neighbors' degrees against nodes' degrees
+% * *exportClustDistribVis*: Plots the distribution of local clustering coefficients across the population of all nodes
+% * *exportDistDistribVis*: Plots the distribution of shortest path distances across the population of all nodes
+% * *exportMetricsVisualizations*: Calls the above three functions
+%
+% All of these functions require two parameters: a metrics struct and a
+% netname to be used in the filename of the exported image. There is also
+% an optional output of the first three functions: the figure object of the
+% visualization. If the output argument is not used, the figure will close
+% automatically.
+%
+% _Note: These functions all require user approval of the visualization 
+% prior to exporting._
+%
+% <html>
+% <img src="example_assortativityPlot.png">
+% <img src="example_clusteringDistribution.png">
+% <img src="example_distanceDistribution.png">
+% </html>
+%% Convention-Style Visualizations
+% Convention-style visuals, in short, are those where lone nodes are pushed
+% to an outer ring, and connected components are displayed in the center of
+% this outer ring. Nodes move around over time as they form and break
+% edges, much like people at a convention would do. More details can be
+% found with the MATLAB command: help getConventionStyleVisualData
+%
+% Three basic commands are associated with the convention-style visuals:
+% 
+% * *plotConventionStyleVisual*: plots a single frame of a graph in the convention-style format.
+% * *plotConventionStyleVisualAnimated*: plots an animation of convention-style visuals, with nodes moving over time
+% * *exportConventionStyleVisualAnimated*: exports a GIF file of an animation of convention-style visuals, with nodes moving over time
+%
+% More information on each of these functions can be found using the MATLAB 
+% help command, and an example script using animations can be found in 
+% 'example_animationScript.m'
+%
+% <html>
+% <img src="example_conventionAnimation.gif">
+% </html>
+graphObj = graph([1,1,2,3,4],[2,3,5,5,9]);
+plotConventionStyleVisual(graphObj);
+%% Edge-Updating Visualizations
+% Edge-updating visuals, in short, are those where the overall graph (the 
+% amalgam of all edges over all time series data) is used to position all 
+% nodes, and then edges are drawn and erased as they are formed and 
+% destroyed. More details can be found with the MATLAB command: 
+% help exportEdgeUpdatingVisualAnimated
+%
+% GIF files of such animations can be generated with the 
+% *exportEdgeUpdatingVisualAnimated* function. An example script using this
+% function can be found in 'example_animationScript.m'
+%
+% <html>
+% <img src="example_edgeUpdatingAnimation.gif">
+% </html>
+%% Infection Spreading Visualizations
+% Both convention-style and edge-updating animations can be used to show
+% how an infection spreads across a population. Infection data can be
+% encoded as a matrix of 0s and 1s, where each row represents a node, each
+% column represents a time step, and a 0 signifies healthy while a 1
+% signifies infected (e.g. if matrix(i,j) = 1, then the ith node is 
+% infected at time step j). Using the 
+% *exportConventionStyleInfectionVisualAnimated* and 
+% *exportEdgeUpdatingInfectionVisualAnimated* functions, one can create
+% export these animations as GIFs. These functions' animations vary from
+% their infection-blind counterparts in that infected nodes are colored
+% red whereas healthy nodes are colored blue, and active edges are colored
+% green to avoid visual confusion with node colors.
+%
+% While the intention of these animations was infection spread, they can be
+% used to signify any boolean state spreading across a population.
+%
+% <html>
+% <img src="">
+% </html>
+##### SOURCE END #####
+--></body></html>
